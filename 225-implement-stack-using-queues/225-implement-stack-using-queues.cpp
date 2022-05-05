@@ -1,6 +1,28 @@
 class MyStack {
-    queue<int> q1,q2;
+    queue<int> q1;
 public:
+    MyStack(){
+    }
+    
+    void push(int x){
+        q1.push(x);
+        for(int i = 0; i < q1.size() - 1; ++i){
+            // pop and push all elements except x that's how we change their respective order
+            q1.push(pop());
+        }
+    }
+    int pop(){
+        int val = q1.front();
+        q1.pop();
+        return val;
+    }
+    int top(){
+        return q1.front();
+    }
+    bool empty(){
+        return q1.empty();
+    }
+/*
 //     Two queue Approach
     MyStack() {
     }
@@ -43,6 +65,7 @@ public:
         }
         return false;
     }
+    */
 };
 
 /**
