@@ -5,9 +5,30 @@ public:
         // int n = prices.size();
         // vector<vector<int>> dp(n,vector<int> (2,-1));
         // return memoized(0,1,prices,dp);
-        return tabulation(prices);
+        // return tabulation(prices);
+        return spaceOptimization(prices);
     }
 private:
+    int spaceOptimization(vector<int> &prices){
+        int n = prices.size();
+        vector<long> nextDay(2,0);
+        
+        for(int day = n-1; day >= 0; day--){
+            vector<long> currDay(2,0);
+            for(int buy = 0; buy <= 1; buy++){
+                if(buy){
+                    currDay[buy] = max(-prices[day] + nextDay[0],
+                                  0 + nextDay[1]);
+                }
+                else{
+                    currDay[buy] = max(prices[day] + nextDay[1],
+                                      0 + nextDay[0]);
+                }
+            }
+            nextDay = currDay;
+        }
+        return nextDay[1];
+    }
     int tabulation(vector<int> &prices){
         int n = prices.size();
         vector<vector<long>> dp(n+1,vector<long>(2,-1));
