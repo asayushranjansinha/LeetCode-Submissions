@@ -43,11 +43,11 @@ public:
             }
         }
         
-        for(auto i : nodes){
+        for(auto col : nodes){
             vector<int>res;
-            for(auto j : i.second){
-                sort(j.second.begin(),j.second.end());
-                for(auto k : j.second){
+            for(auto row : col.second){
+                sort(row.second.begin(),row.second.end());
+                for(auto k : row.second){
                     res.push_back(k);
                 }
                 
