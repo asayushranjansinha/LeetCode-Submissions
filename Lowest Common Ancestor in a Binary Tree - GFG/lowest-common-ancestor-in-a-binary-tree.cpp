@@ -40,13 +40,7 @@ class Solution
     //Function to return the lowest common ancestor in a Binary Tree.
     Node* lca(Node* root ,int n1 ,int n2 )
     {
-       if(root == nullptr){
-            return root;
-        }
-        
-        if(n1 == root->data){
-            return root;
-        }else if(n2 == root->data){
+       if(root == nullptr || root->data == n1 || root->data == n2){
             return root;
         }
         
