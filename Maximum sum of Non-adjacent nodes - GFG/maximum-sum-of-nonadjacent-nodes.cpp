@@ -102,8 +102,24 @@ struct Node
 */
 
 class Solution{
-
-    unordered_map<Node*,int> dp;
+    pair<int,int> solve(Node* root){
+        if(!root){
+            pair<int,int> ans = make_pair(0,0);
+            return ans;
+        }
+        
+        pair<int,int> left = solve(root->left);
+        pair<int,int> right = solve(root->right);
+        
+        // case 1: withnode
+        int withnode = root->data + left.second + right.second;
+        
+        // case 2: withoutnode
+        int withoutnode = max(left.first,left.second) + max(right.first,right.second);
+        
+        pair<int,int> res = make_pair(withnode,withoutnode);
+        return res;
+    }
   public:
     //Function to return the maximum sum of non-adjacent nodes.
     int getMaxSum(Node *root) 
@@ -112,24 +128,8 @@ class Solution{
             return 0;
         }
         
-        if(dp[root]){
-            return dp[root];
-        }
-        // case 1: withoutnode
-        int withoutnode = getMaxSum(root->left) + getMaxSum(root->right);
-        
-        // case 2: withnode
-        int withnode = root->data;
-        
-        if(root->left){
-            withnode += getMaxSum(root->left->left);
-            withnode += getMaxSum(root->left->right);
-        }
-        if(root->right){
-            withnode += getMaxSum(root->right->left);
-            withnode += getMaxSum(root->right->right);
-        }
-        return dp[root] = max(withnode,withoutnode);
+        pair<int,int> ans = solve(root);
+        return max(ans.first,ans.second);
     }
 };
 
