@@ -8,58 +8,86 @@
  * };
  */
 class Solution {
-    bool findRootToNodePath(TreeNode* root,TreeNode* target,vector<TreeNode*> &path){
-        if(root == NULL){
-            return false;
-        }
-        if(root == target){
-            path.push_back(root);
-            return true;
-        }
-        
-        bool findInLeftChild = findRootToNodePath(root->left,target,path);
-        if(findInLeftChild){
-            path.push_back(root);
-            return findInLeftChild;
-        }
-        
-        bool findInRightChild = findRootToNodePath(root->right,target,path);
-        if(findInRightChild){
-            path.push_back(root);
-            return findInRightChild;
-        }
-        return false;
-    }
-    
-    void printKDistance(TreeNode* root, int k, TreeNode* blockNode, vector<int> &ans){
-        if(root == NULL || k < 0 || root == blockNode){
+private:
+    void nodeParentMapping(TreeNode* root, unordered_map<TreeNode*,TreeNode*> &parent){
+        if(root == nullptr){
             return;
         }
         
-        if(k == 0){
-            ans.push_back(root->val);
-            return;
-        }
+        queue<TreeNode*> qu;
+        qu.push(root);
+        parent[root] = nullptr;
         
-        printKDistance(root->left,k-1,blockNode,ans);
-        printKDistance(root->right,k-1,blockNode,ans);
-        return;        
+        while(!qu.empty()){
+            TreeNode* currentNode = qu.front();
+            qu.pop();
+            
+            if(currentNode->left){
+                parent[currentNode->left] = currentNode;
+                qu.push(currentNode->left);
+            }
+            if(currentNode->right){
+                parent[currentNode->right] = currentNode;
+                qu.push(currentNode->right);
+            }
+        }
+        return;
     }
 public:
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        vector<int> nodesAtDistanceK;
+//         step 1: find target Node ,already given here
+//         step 2: create node->parent mapping
+//         step 3: solve
         
-        vector<TreeNode*> path;
-        findRootToNodePath(root,target,path);
+        // created node->parent mapping
+        unordered_map<TreeNode*,TreeNode*> parentMap;
+        nodeParentMapping(root,parentMap);
         
-        for(int i = 0; i < path.size(); i++){
-            if(i != 0){
-                printKDistance(path[i],k-i,path[i-1],nodesAtDistanceK);
-            }else{
-                printKDistance(path[i],k-i,NULL,nodesAtDistanceK);
+        
+        queue<TreeNode*>q;
+        unordered_map<TreeNode*,bool> visitedNodes;
+        
+        // start iteration by marking node as visited
+        q.push(target);
+        visitedNodes[target] = true;
+        
+        int currentLevel = 0;
+        while(!q.empty()){
+            int size = q.size();
+            if(currentLevel++ == k){ break; }
+            
+            // since we are moving radially outward increase level
+            for(int i = 0; i < size; i++){
+                // extracet node from queue
+                TreeNode* currentNode = q.front();
+                q.pop();
+                
+                if(currentNode->left && !visitedNodes[currentNode->left]){
+                    cout << "left child of " << currentNode->val << endl;
+                    q.push(currentNode->left);
+                    visitedNodes[currentNode->left] = true;
+                }
+                
+                if(currentNode->right && !visitedNodes[currentNode->right]){
+                    cout << "right child of " << currentNode->val << endl;
+                    q.push(currentNode->right);
+                    visitedNodes[currentNode->right] = true;
+                }
+                
+                if(parentMap[currentNode] && !visitedNodes[parentMap[currentNode]]){
+                    cout << "parent of " << currentNode->val << endl;
+                    q.push(parentMap[currentNode]);
+                    visitedNodes[parentMap[currentNode]] = true;
+                }
             }
         }
-        
-        return nodesAtDistanceK;
+        vector<int> result;
+        while(!q.empty()){
+            TreeNode* currentNode = q.front();
+            q.pop();
+
+            result.push_back(currentNode->val);
+        }
+        return result;
     }
 };
