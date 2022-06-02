@@ -10,24 +10,23 @@
  * };
  */
 class Solution {
-    bool helper(TreeNode* left, TreeNode* right){
-        if(!left || !right){
-            return left == right;
-        }
-        
-        if(left->val != right->val){
+    bool checkSymmetry(TreeNode* root1, TreeNode* root2){
+        if(!root1 && !root2){
+            return true;
+        }else if(!root1 || !root2){
             return false;
         }
-        return helper(left->left,right->right)
-            &&  helper(left->right,right->left);
-            
+        if(root1->val != root2->val){
+            return false;
+        }
+        
+        return checkSymmetry(root1->left,root2->right) && checkSymmetry(root1->right,root2->left);
     }
 public:
     bool isSymmetric(TreeNode* root) {
-        if(!root){
-            return false;
+        if(!root || (!root->left  && !root->right)){
+            return true;
         }
-        
-        return helper(root->left,root->right);
+        return checkSymmetry(root->left,root->right);
     }
 };
