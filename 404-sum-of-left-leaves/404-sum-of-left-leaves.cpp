@@ -10,22 +10,34 @@
  * };
  */
 class Solution {
-    int helper(TreeNode* root, int &sum, int isLeftLeaf){
-        if(root == NULL){
-            return 0;
-        }
-        else if(root->left == NULL && root->right == NULL){
-            if(isLeftLeaf){
-                return root->val;
-            }
-            return 0;
-        }
-        
-        return sum + helper(root->left,sum,1) + helper(root->right,sum,0);
-    }
 public:
     int sumOfLeftLeaves(TreeNode* root) {
+        pair<TreeNode*,int> node;
+        queue<pair<TreeNode*,int> > q;
+        q.push(make_pair(root,0));
+        
         int sum = 0;
-        return helper(root,sum,0);
+        while(q.size() > 0){
+            auto frontNode = q.front();
+            q.pop();
+            
+            root = frontNode.first;
+            int isLeftLeaf = frontNode.second;
+            
+            if(root->left == NULL && root->right == NULL){
+                // isLeaf 
+                if(isLeftLeaf){
+                    sum += root->val;
+                }
+            }
+            
+            if(root->left){
+                q.push(make_pair(root->left,1));
+            }
+            if(root->right){
+                q.push(make_pair(root->right,0));
+            }
+        }
+        return sum;
     }
 };
