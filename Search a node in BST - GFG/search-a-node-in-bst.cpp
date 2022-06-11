@@ -59,14 +59,19 @@ bool search(Node* root, int x) {
     if(root == NULL){
         return false;
     }
-    // Your code here
-    if(root->data == x){
-        return true;
+    
+    Node* current = root;
+    while(current){
+        if(current->data == x){
+            return true;
+        }
+        else if(current->data < x){
+            current = current->right;
+        }
+        else{
+            current = current->left;
+        }
+        
     }
-    else if(root->data < x){
-        return search(root->right,x);
-    }
-    else{
-        return search(root->left,x);
-    }
+    return false;
 }
