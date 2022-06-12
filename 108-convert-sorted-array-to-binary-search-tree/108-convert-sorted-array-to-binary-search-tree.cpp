@@ -10,23 +10,24 @@
  * };
  */
 class Solution {
-private:
-    TreeNode* createSubtree(int start,int end,vector<int> &nums){
-        if(start > end || start >= nums.size() || end < 0){
-            return nullptr;
+    TreeNode* insert(TreeNode* root, int lo, int hi, vector<int> &nums){
+        if(lo > hi){
+            return NULL;
         }
         
-        int index = (start + end)/2;
-        int val = nums[index];
-        TreeNode* root = new TreeNode(val);
-        root->left = createSubtree(start,index-1,nums);
-        root->right = createSubtree(index+1,end,nums);
+        int mid = lo + (hi - lo)/2;
+        int val = nums[mid];
+        root = new TreeNode(val);
+        
+        root->left = insert(root->left,lo,mid-1,nums);
+        root->right = insert(root->right,mid+1,hi,nums);
+        
         return root;
     }
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        int start = 0,end = nums.size();
-        TreeNode* ans = createSubtree(start,end,nums);
-        return ans;
+        int n = nums.size();
+        TreeNode* root = insert(root,0,n-1,nums);
+        return root;
     }
 };
