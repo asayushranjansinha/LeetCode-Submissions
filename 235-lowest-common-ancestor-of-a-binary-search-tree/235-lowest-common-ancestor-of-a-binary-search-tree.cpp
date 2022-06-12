@@ -11,26 +11,16 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL || root == p || root == q){
-            return root;
+        if(root->val > p->val && root->val > q->val){
+            return lowestCommonAncestor(root->left,p,q);
         }
         
-        TreeNode* left = lowestCommonAncestor(root->left,p,q);
-        TreeNode* right = lowestCommonAncestor(root->right,p,q);
+        else if(root->val < p->val && root->val < q->val){
+            return lowestCommonAncestor(root->right,p,q);
+        }
         
-        if(left && right){
-            // found lca
+        else {
             return root;
         }
-        else if(left){
-            // lca is in left
-            return left;
-        }
-        else if(right){
-            // lca is in right
-            return right;
-        }
-        // not found targets
-        return NULL;
     }
 };
