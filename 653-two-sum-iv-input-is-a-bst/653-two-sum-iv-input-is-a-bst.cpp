@@ -1,40 +1,66 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    vector<int> inorder;
-    void inOrder(TreeNode* root){
-        if(root == NULL){
-            return ;
-        }
-        
-        inOrder(root->left);
-        inorder.push_back(root->val);
-        inOrder(root->right);
-        return;
+class BSTIterator{
+    stack<TreeNode*> nxt;
+    stack<TreeNode*> prv;
+    
+    public:
+    
+    BSTIterator(TreeNode* root){
+        pushAll(root,1); // create next stack
+        pushAll(root,0); // create previous stack
     }
+    
+    void pushAll(TreeNode* root,int dir){
+        if(dir == 1){
+            // pushing into next stack
+            while(root!= NULL){
+                nxt.push(root);
+                root = root->left;
+            }
+        }
+        else{
+            // pushing into previous stack
+            while(root!= NULL){
+                prv.push(root);
+                root = root->right;
+            }
+        }
+    }
+    
+    int next(){
+        auto node = nxt.top();
+        nxt.pop();
+        
+        if(node->right){
+            pushAll(node->right,1);
+        }
+        return node->val;
+    }
+    
+    int previous(){
+        auto node = prv.top();
+        prv.pop();
+        
+        if(node->left){
+            pushAll(node->left,0);
+        }
+        return node->val;
+    }
+};
+class Solution {
 public:
     bool findTarget(TreeNode* root, int k) {
-        inOrder(root);
-        int low = 0, high = inorder.size() - 1;
-        cout << inorder.size() << endl;
-        while(low < high){
-            if(inorder[low] + inorder[high] == k){
+        BSTIterator l(root);
+        BSTIterator r(root);
+        
+        int i = l.next(), j = r.previous();
+        while(i < j){
+            if(i + j == k){
                 return true;
             }
-            else if(inorder[low] + inorder[high] < k){
-                low++;
-            }
-            else{
-                high--;
+            else if(i + j < k){
+                i = l.next();
+            }else{
+                j = r.previous();
             }
         }
         return false;
