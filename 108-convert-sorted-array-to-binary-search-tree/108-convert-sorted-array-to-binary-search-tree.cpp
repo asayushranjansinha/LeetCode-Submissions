@@ -10,24 +10,26 @@
  * };
  */
 class Solution {
-    TreeNode* insert(TreeNode* root, int lo, int hi, vector<int> &nums){
-        if(lo > hi){
+    TreeNode* createBST(int low, int high,vector<int> &nums){
+        // basecase
+        if(low > high){
             return NULL;
         }
         
-        int mid = lo + (hi - lo)/2;
-        int val = nums[mid];
-        root = new TreeNode(val);
+        int midIndex = (low + high)/2;
+        int val = nums[midIndex];
+        TreeNode* root = new TreeNode(val);
         
-        root->left = insert(root->left,lo,mid-1,nums);
-        root->right = insert(root->right,mid+1,hi,nums);
+//         recursive calls to create left & right subtrees
+        root->left = createBST(low,midIndex-1,nums);
+        root->right = createBST(midIndex+1,high,nums);
         
         return root;
     }
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        int n = nums.size();
-        TreeNode* root = insert(root,0,n-1,nums);
+        int low = 0,high = nums.size();
+        TreeNode* root = createBST(low,high-1,nums);
         return root;
     }
 };
