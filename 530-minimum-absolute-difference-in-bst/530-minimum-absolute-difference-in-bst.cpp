@@ -10,26 +10,34 @@
  * };
  */
 class Solution {
-    void pushElements(TreeNode* root, vector<int> &el){
+    int diff;
+    pair<int,int> solve(TreeNode* root){
         if(root == NULL){
-            return;
+            return {-1e8,1e8};
         }
+        pair<int,int> left = solve(root->left);
+        pair<int,int> right = solve(root->right);
         
-        pushElements(root->left,el);
-        el.push_back(root->val);
-        pushElements(root->right,el);
+        int leftmaxi = left.first;
+        int leftmini = left.second;
         
-        return;
+        int rightmaxi = right.first;
+        int rightmini = right.second;
+        
+        int ndiff = min( abs(root->val - leftmaxi),
+                         abs(rightmini - root->val));
+        
+        diff = min(diff,ndiff);
+        
+        int maxi = max(root->val,rightmaxi);
+        int mini = min(root->val, leftmini);
+        return {maxi,mini};
+        
     }
 public:
     int getMinimumDifference(TreeNode* root) {
-        vector<int> elements;
-        pushElements(root,elements);
-        
-        int diff = INT_MAX;
-        for(int i = 0; i < elements.size() - 1; i++){
-            diff = min(diff,(abs(elements[i] - elements[i+1])));
-        }
+        diff = INT_MAX; 
+        solve(root);
         return diff;
     }
 };
