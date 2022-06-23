@@ -9,26 +9,73 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
-    vector<int> res;
+class BSTIterator{
+    stack<TreeNode*> tree;
+    
+    public:
+    
+    BSTIterator(TreeNode* root){
+        pushAll(root);
+    }
+    
     void pushAll(TreeNode* root){
-        if(root == NULL){
-            return;
+        while(root != NULL){
+            tree.push(root);
+            root = root->left;
+        }
+    }
+    bool hasNext(){
+        return tree.size() > 0;
+    }
+    
+    int getNext(){
+        if(!hasNext()) { return -1e9; }
+        TreeNode* next = tree.top();
+        tree.pop();
+        
+        if(next->right != NULL){
+            pushAll(next->right);
+        }
+        return next->val;
+    }
+};
+class Solution {
+public:
+    vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
+        vector<int> res;
+        
+        BSTIterator iterator1(root1);
+        BSTIterator iterator2(root2);
+        
+        auto val1 = iterator1.getNext();
+        auto val2 = iterator2.getNext();
+        
+        while(val1 != -1e9 && val2 != -1e9){
+            if(val1 == val2){
+                res.push_back(val1);
+                res.push_back(val2);
+                
+                val1 = iterator1.getNext();
+                val2 = iterator2.getNext();
+            }
+            else if(val1 < val2){
+                res.push_back(val1);
+                val1 = iterator1.getNext();
+            }
+            else{
+                res.push_back(val2);
+                val2 = iterator2.getNext();
+            }
         }
         
-        pushAll(root->left);
-        res.push_back(root->val);
-        pushAll(root->right);
-        
-        return;
-    }
-public:
-    vector<int> getAllElements(TreeNode* root1, TreeNode* root2){
-        
-        pushAll(root1);
-        pushAll(root2);
-        sort(res.begin(),res.end());
-        
+        while(val1 != -1e9){
+            res.push_back(val1);
+            val1 = iterator1.getNext();
+        }
+        while(val2 != -1e9){
+            res.push_back(val2);
+            val2 = iterator2.getNext();
+        }
         return res;
     }
 };
