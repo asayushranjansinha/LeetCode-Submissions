@@ -1,0 +1,2 @@
+Approach:
+The approach here is to traverse tree in any fashion, here in levelorder & store all the nodes into a string in such a way that it would have been a complete binary tree. Since we are not sure it is a complete binary tree or not we will use # as a null node.
