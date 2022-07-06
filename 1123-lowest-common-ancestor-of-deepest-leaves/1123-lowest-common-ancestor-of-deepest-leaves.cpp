@@ -9,6 +9,12 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+/*
+** At each node we will have depth of both left & right subtree,
+** because of which we will always know the highest subtree,
+** so we can always focus on the highest subtree.
+** Whenever the hight of both subtrees is equal then, root must be desired root
+*/
 class Solution {
 public:
     TreeNode* lcaDeepestLeaves(TreeNode* root) {
