@@ -27,7 +27,7 @@ private:
              }
             
             else{
-                low[node] = min(low[node], tin[it]);
+                low[node] = min(low[node],low[it]);
              }
         }
     }
