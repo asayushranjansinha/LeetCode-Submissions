@@ -1,57 +1,25 @@
 class Solution {
 public:
-    // optimized approach: dutch national flag algorithm
-    void sortColors(vector<int> &nums){
+    void sortColors(vector<int>& nums) {
+        // 0 to i - 1 : 0
+        // i to j - 1 : 1
+        // j to k : unknown
+        // k + 1 to end : 2
         int N = nums.size();
-        int low = 0;
-        int hi = N-1;
-        int mid = low;
-        
-        // the logic is that 
-        // 0 from 0-index to lo-1
-        // 1 from lo-index to mid-1
-        // 2 from hi-index to N-1
-        
-        while(mid <= hi){
-            if(nums[mid] == 0){
-                swap(nums[low],nums[mid]);
-                mid++;
-                low++;
-            }else if(nums[mid] == 1){
-                mid++;
-            }else{
-                swap(nums[mid],nums[hi]);
-                hi--;
+        int i = 0,j = 0,k = N-1;
+        while(j <= k){
+            if(nums[j] == 0){
+                swap(nums[i],nums[j]);
+                i++;
+                j++;
+            }
+            else if(nums[j] == 1){
+                j++;
+            }
+            else{
+                swap(nums[j],nums[k]);
+                k--;
             }
         }
-        return;
     }
-    // brute force
-//     void sortColors(vector<int>& nums) {
-//         int N = nums.size(),z=0,o=0,t=0;
-//         for(auto num : nums){
-//             if(num == 0){
-//                 z++;
-//             }else if(num == 1){
-//                 o++;
-//             }else{
-//                 t++;
-//             }
-//         }
-        
-//         int i = 0;
-//         while(z--){
-//             nums[i] = 0;
-//             i++;
-//         }
-//         while(o--){
-//             nums[i] = 1;
-//             i++;
-//         }
-//         while(t--){
-//             nums[i] = 2;
-//             i++;
-//         }
-//         return;
-//     }
 };
