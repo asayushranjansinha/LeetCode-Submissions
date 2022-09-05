@@ -32,11 +32,13 @@ private:
         if(addcase <= 9){
             int modifiedNumber = numberSoFar * 10 + addcase;
             createNumber(numberOfDigits-1,modifiedNumber,K,result);
-        }        
+        }
+//         K > 0 is needed to handle a case when K = 0 so we do not end up creating same number twice since addcase and subcase wil be same
         if(K > 0 && subcase >= 0){
             int modifiedNumber = numberSoFar * 10 + subcase;
             createNumber(numberOfDigits-1,modifiedNumber,K,result);
         }
+//         TC: O(N* 2 ^N) SC: O(N) recursion
     }
 public:
     vector<int> numsSameConsecDiff(int N, int K) {
